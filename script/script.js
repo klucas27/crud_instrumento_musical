@@ -6,11 +6,17 @@ document.getElementById('salvarBtn').addEventListener('click', function () {
     const nome = document.getElementById('nome').value;
     const tipo = document.getElementById('tipo').value;
     const marca = document.getElementById('marca').value;
-    const preco = document.getElementById('preco').value;
+    const preco = parseFloat(document.getElementById('preco').value);
 
     // Validar os campos obrigatórios
-    if (!nome || !tipo || !preco) {
+    if (!nome || !tipo || isNaN(preco)) {
         alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+    }
+
+    // Validar o intervalo do preço
+    if (preco < 100 || preco > 50000) {
+        alert('O preço deve estar entre R$ 100 e R$ 50.000.');
         return;
     }
 
@@ -20,7 +26,7 @@ document.getElementById('salvarBtn').addEventListener('click', function () {
         nome,
         tipo,
         marca,
-        preco: parseFloat(preco).toFixed(2) // Formatar o preço com 2 casas decimais
+        preco: preco.toFixed(2) // Formatar o preço com 2 casas decimais
     };
 
     instrumentos.push(instrumento); // Adicionar o instrumento ao array
@@ -46,10 +52,10 @@ function atualizarTabela() {
             <td>${instrumento.nome}</td>
             <td>${instrumento.tipo}</td>
             <td>${instrumento.marca}</td>
-            <td>${instrumento.preco}</td>
+            <td>R$ ${instrumento.preco}</td>
             <td>
-                <button class="editarBtn" data-id="${instrumento.id}">Editar</button>
-                <button class="excluirBtn" data-id="${instrumento.id}">Excluir</button>
+                <button class="editarBtn btn btn-warning btn-sm" data-id="${instrumento.id}">Editar</button>
+                <button class="excluirBtn btn btn-danger btn-sm" data-id="${instrumento.id}">Excluir</button>
             </td>
         `;
 
