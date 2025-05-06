@@ -1,41 +1,34 @@
-let instrumentos = []; // Array para armazenar os instrumentos
-let nextId = 1; // Variável para gerar IDs únicos
-
-// Referência ao botão "Salvar"
+let instrumentos = []; 
+let nextId = 1; 
 document.getElementById('salvarBtn').addEventListener('click', function () {
     const nome = document.getElementById('nome').value;
     const tipo = document.getElementById('tipo').value;
     const marca = document.getElementById('marca').value;
     const preco = parseFloat(document.getElementById('preco').value);
 
-    // Validar os campos obrigatórios
     if (!nome || !tipo || isNaN(preco)) {
         alert('Por favor, preencha todos os campos obrigatórios.');
         return;
     }
 
-    // Validar o intervalo do preço
     if (preco < 100 || preco > 50000) {
         alert('O preço deve estar entre R$ 100 e R$ 50.000.');
         return;
     }
 
-    // Criar um objeto para o instrumento com ID único
     const instrumento = {
-        id: nextId++, // Gerar ID único
+        id: nextId++,
         nome,
         tipo,
         marca,
-        preco: preco.toFixed(2) // Formatar o preço com 2 casas decimais
+        preco: preco.toFixed(2) 
     };
 
-    instrumentos.push(instrumento); // Adicionar o instrumento ao array
-
+    instrumentos.push(instrumento); 
     atualizarTabela(); // Atualizar a tabela
 
     console.log('Lista de instrumentos:', instrumentos); // Imprimir a lista de instrumentos no console
 
-    // Limpar o formulário
     document.getElementById('instrumentoForm').reset();
 });
 
