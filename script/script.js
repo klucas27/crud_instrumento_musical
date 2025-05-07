@@ -1,5 +1,7 @@
-let instrumentos = []; 
-let nextId = 1; 
+let instrumentos = [];
+let nextId = 1;
+let instrumentoEditandoId = null; // Variável para armazenar o ID do instrumento em edição
+
 document.getElementById('salvarBtn').addEventListener('click', function () {
     const nome = document.getElementById('nome').value;
     const tipo = document.getElementById('tipo').value;
@@ -16,20 +18,35 @@ document.getElementById('salvarBtn').addEventListener('click', function () {
         return;
     }
 
-    const instrumento = {
-        id: nextId++,
-        nome,
-        tipo,
-        marca,
-        preco: preco.toFixed(2) 
-    };
+    if (instrumentoEditandoId !== null) {
+        // Atualizar o instrumento existente
+        const instrumento = instrumentos.find((inst) => inst.id === instrumentoEditandoId);
+        if (instrumento) {
+            instrumento.nome = nome;
+            instrumento.tipo = tipo;
+            instrumento.marca = marca;
+            instrumento.preco = preco.toFixed(2);
+        }
+        instrumentoEditandoId = null; // Resetar o ID de edição
+    } else {
+        // Adicionar um novo instrumento
+        const instrumento = {
+            id: nextId++,
+            nome,
+            tipo,
+            marca,
+            preco: preco.toFixed(2)
+        };
+        instrumentos.push(instrumento);
+    }
 
-    instrumentos.push(instrumento); 
     atualizarTabela(); // Atualizar a tabela
+    document.getElementById('instrumentoForm').reset(); // Resetar o formulário
+});
 
-    console.log('Lista de instrumentos:', instrumentos); // Imprimir a lista de instrumentos no console
-
-    document.getElementById('instrumentoForm').reset();
+// Adicionar evento ao botão de limpar para cancelar a edição
+document.getElementById('instrumentoForm').addEventListener('reset', function () {
+    instrumentoEditandoId = null; // Cancelar a edição
 });
 
 // Função para atualizar a tabela
@@ -80,8 +97,7 @@ function editarInstrumento(id) {
         document.getElementById('marca').value = instrumento.marca;
         document.getElementById('preco').value = instrumento.preco;
 
-        // Remover o instrumento do array para evitar duplicação
-        instrumentos = instrumentos.filter((instrumento) => instrumento.id !== id);
-        atualizarTabela();
+        // Armazenar o ID do instrumento em edição
+        instrumentoEditandoId = id;
     }
 }
